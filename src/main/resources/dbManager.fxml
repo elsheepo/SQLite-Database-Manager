@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="415.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane>
+            <children>
+                <TextField fx:id="dbUrlTxt" layoutX="110.0" layoutY="14.0" onKeyPressed="#connectOnReturn" prefHeight="25.0" prefWidth="359.0" style="-fx-background-radius: 10;" />
+                <Button fx:id="connectBtn" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#connectOnReturn" onMouseClicked="#connectOnClick" text="Connect" />
+                <Button fx:id="disconnectBtn" layoutX="571.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#disconnectOnReturn" onMouseClicked="#disconnectOnClick" prefHeight="25.0" prefWidth="80.0" text="Disconnect" />
+                <Button fx:id="addBtn" layoutX="36.0" layoutY="136.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
+                <Button fx:id="updateBtn" layoutX="36.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Update" />
+                <Button fx:id="deleteBtn" layoutX="36.0" layoutY="217.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Delete" />
+            <Pane layoutX="111.0" layoutY="62.0" prefHeight="255.0" prefWidth="520.0" style="-fx-border-color: black;">
+               <children>
+                      <TabPane fx:id="tabPane" prefHeight="255.0" prefWidth="520.0" tabClosingPolicy="UNAVAILABLE" />
+               </children>
+            </Pane>
+                <Button fx:id="saveBtn" layoutX="557.0" layoutY="340.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" text="Save" />
+                <Button fx:id="exitBtn" layoutX="611.0" layoutY="340.0" mnemonicParsing="false" onKeyPressed="#exitOnReturn" onMouseClicked="#exitOnClick" prefHeight="25.0" prefWidth="40.0" text="Exit" />
+                <Label layoutX="57.0" layoutY="18.0" prefWidth="35.0" text="db url:" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
