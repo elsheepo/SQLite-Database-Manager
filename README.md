@@ -18,8 +18,8 @@ In order to run the program, Java SE Runtime Environment 8 or higher must be ins
 
 ### :computer: Execution
 
-- For Windows users, simply extract the `convertron.exe` from the archive, and run.
-- For Linux users, extract the `convertron.jar` file from the archive, and execute with the following commands.
+- For Windows users, simply extract the `sqlite-db-mgr.exe` from the archive, and run.
+- For Linux users, extract the `sqlite-db-mgr.jar` file from the archive, and execute with the following commands.
     
       tar -xvjf sqlite-db-mgr-1.0.tar.bz2
       java -jar sqlite-db-mgr-1.0/sqlite-db-mgr.jar
