@@ -8,14 +8,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
+
 public class Controller implements Initializable {
 
+    final FileChooser fileChooser = new FileChooser();
+
+    private Stage stage = new Stage();
+
+    private File dbFile;
     private Connection connection;
 
     @FXML
@@ -23,16 +32,29 @@ public class Controller implements Initializable {
     @FXML
     public TabPane tabPane;
     @FXML
-    public Button connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn, exitBtn;
+    public Button fileChooserBtn, connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn, exitBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbUrlTxt.setText("products.sqlite");
+        dbUrlTxt.setPromptText("select a sqlite database");
         disconnectBtn.setDisable(true);
         addBtn.setDisable(true);
         updateBtn.setDisable(true);
         deleteBtn.setDisable(true);
         saveBtn.setDisable(true);
+    }
+
+    public void displayFileChooserOnClick() { displayFileChooser(); }
+    public void displayFileChooserOnReturn(KeyEvent e) {
+        if (e.getCode().equals(KeyCode.ENTER))
+            displayFileChooser();
+    }
+    public void displayFileChooser() {
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            dbFile = file;
+            dbUrlTxt.setText(file.getAbsolutePath());
+        }
     }
 
     public void connectOnClick() { connect(); }
@@ -114,6 +136,7 @@ public class Controller implements Initializable {
     private void add() {
         
     }
+
     private Connection getConnection(String url) {
         Connection connection = null;
         try {
@@ -126,10 +149,12 @@ public class Controller implements Initializable {
     }
 
     public void disconnectOnClick() { closeConnection(); }
+
     public void disconnectOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER))
             closeConnection();
     }
+
     private void closeConnection() {
 
         // close connection and log to console
@@ -148,10 +173,12 @@ public class Controller implements Initializable {
     }
 
     public void exitOnClick() { exit(); }
+
     public void exitOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER))
             exit();
     }
+
     private void exit() {
         new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit?").showAndWait();
         if (connection != null) {

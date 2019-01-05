@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -34,7 +34,8 @@
         </MenuBar>
         <AnchorPane>
             <children>
-                <TextField fx:id="dbUrlTxt" layoutX="110.0" layoutY="14.0" onKeyPressed="#connectOnReturn" prefHeight="25.0" prefWidth="359.0" style="-fx-background-radius: 10;" />
+            <Button fx:id="fileChooserBtn" layoutX="67.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#displayFileChooserOnReturn" onMouseClicked="#displayFileChooserOnClick" prefHeight="25.0" prefWidth="25.0" />
+                <TextField fx:id="dbUrlTxt" layoutX="110.0" layoutY="14.0" onKeyPressed="#connectOnReturn" prefHeight="25.0" prefWidth="359.0" promptText="select a sqlite database" style="-fx-background-radius: 10;" />
                 <Button fx:id="connectBtn" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#connectOnReturn" onMouseClicked="#connectOnClick" text="Connect" />
                 <Button fx:id="disconnectBtn" layoutX="571.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#disconnectOnReturn" onMouseClicked="#disconnectOnClick" prefHeight="25.0" prefWidth="80.0" text="Disconnect" />
                 <Button fx:id="addBtn" layoutX="36.0" layoutY="136.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
@@ -47,8 +48,11 @@
             </Pane>
                 <Button fx:id="saveBtn" layoutX="557.0" layoutY="340.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" text="Save" />
                 <Button fx:id="exitBtn" layoutX="611.0" layoutY="340.0" mnemonicParsing="false" onKeyPressed="#exitOnReturn" onMouseClicked="#exitOnClick" prefHeight="25.0" prefWidth="40.0" text="Exit" />
-                <Label layoutX="57.0" layoutY="18.0" prefWidth="35.0" text="db url:" />
+
             </children>
+            <stylesheets>
+                <URL value="@../css/main.css" />
+            </stylesheets>
         </AnchorPane>
     </children>
 </VBox>

@@ -1,0 +1,6 @@
+#fileChooserBtn {
+    -fx-background-image: url("../img/fileChooser-icon.png");
+    -fx-background-size: 20 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+}
