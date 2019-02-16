@@ -26,6 +26,7 @@ public class Controller implements Initializable {
 
     private File dbFile;
     private Connection connection;
+    private DBController dbController;
 
     @FXML
     private TextField dbUrlTxt;
@@ -52,7 +53,7 @@ public class Controller implements Initializable {
             displayFileChooser();
         }
     }
-    public void displayFileChooser() {
+    private void displayFileChooser() {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             dbFile = file;
@@ -61,33 +62,29 @@ public class Controller implements Initializable {
     }
 
     public void connectOnClick() {
-        connect();
+        handleConnect();
     }
     public void connectOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
-            connect();
+            handleConnect();
         }
     }
-    private void connect() {
-
-        StringBuilder dbUrl = new StringBuilder("jdbc:sqlite:");
+    private void handleConnect() {
         if (dbUrlTxt.getText().isEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Database url must be specified.").showAndWait();
         } else {
-            connection = getConnection(dbUrl.append(dbUrlTxt.getText()).toString());
-            String tableQuery = "SELECT * FROM sqlite_master WHERE type='table' ORDER BY name";
+            dbController = new DBController(dbUrlTxt.getText());
+            ResultSet tableNames = dbController.queryTables();
 
-            try (PreparedStatement tableQueryPS = connection.prepareStatement(tableQuery)) {
-                ResultSet tableNames = tableQueryPS.executeQuery();
-
+            try {
                 while (tableNames.next()) {
                     ObservableList<ObservableList> data = FXCollections.observableArrayList();
                     Tab tab = new Tab(tableNames.getString("name"));
                     TableView<ObservableList> tableView = new TableView<>();
                     tabPane.getTabs().add(tab);
                     tab.setContent(tableView);
-                    String dataQuery = "SELECT * from " + tableNames.getString("name") ;
-                    ResultSet tableValues = connection.createStatement().executeQuery(dataQuery);
+
+                    ResultSet tableValues = dbController.queryData(tableNames);
 
                     for (int i = 0; i < tableValues.getMetaData().getColumnCount(); i++) {
                         final int j = i;
@@ -126,6 +123,8 @@ public class Controller implements Initializable {
                     tableView.getItems().addAll(data);
                 }
                 tableNames.close();
+                System.out.println("ResultSet tableNames closed");
+
             } catch (SQLException tableQueryException) {
                 System.err.println(tableQueryException.toString());
             }
@@ -143,30 +142,19 @@ public class Controller implements Initializable {
         
     }
 
-    private Connection getConnection(String url) {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(url);
-        } catch (SQLException connectionException) {
-            System.err.println(connectionException.toString());
-            new Alert(Alert.AlertType.ERROR, "There was a problem connecting to the database. Please check that the url is correct.").showAndWait();
-        }
-        return connection;
-    }
-
     public void disconnectOnClick() {
-        closeConnection();
+        handleDisconnect();
     }
 
     public void disconnectOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
-            closeConnection();
+            handleDisconnect();
         }
     }
 
-    private void closeConnection() {
+    private void handleDisconnect() {
         // close database connection
-        connection = null;
+        dbController.disconnect();
 
         // reset buttons
         connectBtn.setDisable(false);
@@ -176,23 +164,23 @@ public class Controller implements Initializable {
         deleteBtn.setDisable(true);
         saveBtn.setDisable(true);
 
-        // close tabs
+        // clear the TabPane
         tabPane.getTabs().clear();
     }
 
     public void exitOnClick() {
-        exit();
+        handleExit();
     }
 
     public void exitOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER))
-            exit();
+            handleExit();
     }
 
-    private void exit() {
+    private void handleExit() {
         new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit?").showAndWait();
-        if (connection != null) {
-            connection = null;
+        if (dbController.getConnection() != null) {
+            dbController.disconnect();
         }
         Platform.exit();
     }
