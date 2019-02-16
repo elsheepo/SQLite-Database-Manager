@@ -24,8 +24,6 @@ public class Controller implements Initializable {
 
     private Stage stage = new Stage();
 
-    private File dbFile;
-    private Connection connection;
     private DBController dbController;
 
     @FXML
@@ -53,10 +51,9 @@ public class Controller implements Initializable {
             displayFileChooser();
         }
     }
-    private void displayFileChooser() {
+    public void displayFileChooser() {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            dbFile = file;
             dbUrlTxt.setText(file.getAbsolutePath());
         }
     }
@@ -69,7 +66,7 @@ public class Controller implements Initializable {
             handleConnect();
         }
     }
-    private void handleConnect() {
+    public void handleConnect() {
         if (dbUrlTxt.getText().isEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Database url must be specified.").showAndWait();
         } else {
@@ -138,7 +135,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void add() {
+    public void add() {
         
     }
 
@@ -152,7 +149,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void handleDisconnect() {
+    public void handleDisconnect() {
         // close database connection
         dbController.disconnect();
 
@@ -177,9 +174,9 @@ public class Controller implements Initializable {
             handleExit();
     }
 
-    private void handleExit() {
+    public void handleExit() {
         new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit?").showAndWait();
-        if (dbController.getConnection() != null) {
+        if (dbController != null && dbController.getConnection() != null) {
             dbController.disconnect();
         }
         Platform.exit();
