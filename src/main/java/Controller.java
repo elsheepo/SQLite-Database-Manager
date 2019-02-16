@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    final FileChooser fileChooser = new FileChooser();
+    private final FileChooser fileChooser = new FileChooser();
 
     private Stage stage = new Stage();
 
@@ -28,11 +28,11 @@ public class Controller implements Initializable {
     private Connection connection;
 
     @FXML
-    public TextField dbUrlTxt;
+    private TextField dbUrlTxt;
     @FXML
-    public TabPane tabPane;
+    private TabPane tabPane;
     @FXML
-    public Button fileChooserBtn, connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn, exitBtn;
+    private Button fileChooserBtn, connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn, exitBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,10 +44,13 @@ public class Controller implements Initializable {
         saveBtn.setDisable(true);
     }
 
-    public void displayFileChooserOnClick() { displayFileChooser(); }
+    public void displayFileChooserOnClick() {
+        displayFileChooser();
+    }
     public void displayFileChooserOnReturn(KeyEvent e) {
-        if (e.getCode().equals(KeyCode.ENTER))
+        if (e.getCode().equals(KeyCode.ENTER)) {
             displayFileChooser();
+        }
     }
     public void displayFileChooser() {
         File file = fileChooser.showOpenDialog(stage);
@@ -57,10 +60,13 @@ public class Controller implements Initializable {
         }
     }
 
-    public void connectOnClick() { connect(); }
+    public void connectOnClick() {
+        connect();
+    }
     public void connectOnReturn(KeyEvent e) {
-        if (e.getCode().equals(KeyCode.ENTER))
+        if (e.getCode().equals(KeyCode.ENTER)) {
             connect();
+        }
     }
     private void connect() {
 
@@ -148,16 +154,18 @@ public class Controller implements Initializable {
         return connection;
     }
 
-    public void disconnectOnClick() { closeConnection(); }
+    public void disconnectOnClick() {
+        closeConnection();
+    }
 
     public void disconnectOnReturn(KeyEvent e) {
-        if (e.getCode().equals(KeyCode.ENTER))
+        if (e.getCode().equals(KeyCode.ENTER)) {
             closeConnection();
+        }
     }
 
     private void closeConnection() {
-
-        // close connection and log to console
+        // close database connection
         connection = null;
 
         // reset buttons
@@ -172,7 +180,9 @@ public class Controller implements Initializable {
         tabPane.getTabs().clear();
     }
 
-    public void exitOnClick() { exit(); }
+    public void exitOnClick() {
+        exit();
+    }
 
     public void exitOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER))

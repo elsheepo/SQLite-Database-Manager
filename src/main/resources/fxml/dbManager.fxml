@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="415.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
     <children>
         <MenuBar>
             <menus>
@@ -32,22 +32,22 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane>
+        <AnchorPane prefHeight="582.0" prefWidth="800.0">
             <children>
-            <Button fx:id="fileChooserBtn" layoutX="67.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#displayFileChooserOnReturn" onMouseClicked="#displayFileChooserOnClick" prefHeight="25.0" prefWidth="25.0" />
-                <TextField fx:id="dbUrlTxt" layoutX="110.0" layoutY="14.0" onKeyPressed="#connectOnReturn" prefHeight="25.0" prefWidth="359.0" promptText="select a sqlite database" style="-fx-background-radius: 10;" />
-                <Button fx:id="connectBtn" layoutX="504.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#connectOnReturn" onMouseClicked="#connectOnClick" text="Connect" />
-                <Button fx:id="disconnectBtn" layoutX="571.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#disconnectOnReturn" onMouseClicked="#disconnectOnClick" prefHeight="25.0" prefWidth="80.0" text="Disconnect" />
-                <Button fx:id="addBtn" layoutX="36.0" layoutY="136.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Add" />
-                <Button fx:id="updateBtn" layoutX="36.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Update" />
-                <Button fx:id="deleteBtn" layoutX="36.0" layoutY="217.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Delete" />
-            <Pane layoutX="111.0" layoutY="62.0" prefHeight="255.0" prefWidth="520.0" style="-fx-border-color: black;">
+            <Button fx:id="fileChooserBtn" layoutX="55.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#displayFileChooserOnReturn" onMouseClicked="#displayFileChooserOnClick" prefHeight="31.0" prefWidth="37.0" />
+                <TextField fx:id="dbUrlTxt" layoutX="110.0" layoutY="14.0" onKeyPressed="#connectOnReturn" prefHeight="31.0" prefWidth="420.0" promptText="select a sqlite database" style="-fx-background-radius: 10;" />
+                <Button fx:id="connectBtn" layoutX="551.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#connectOnReturn" onMouseClicked="#connectOnClick" text="Connect" />
+                <Button fx:id="disconnectBtn" layoutX="641.0" layoutY="14.0" mnemonicParsing="false" onKeyPressed="#disconnectOnReturn" onMouseClicked="#disconnectOnClick" prefHeight="31.0" prefWidth="106.0" text="Disconnect" />
+                <Button fx:id="addBtn" layoutX="23.0" layoutY="140.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="69.0" text="Add" />
+                <Button fx:id="updateBtn" layoutX="23.0" layoutY="181.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="69.0" text="Update" />
+                <Button fx:id="deleteBtn" layoutX="23.0" layoutY="221.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="69.0" text="Delete" />
+            <Pane layoutX="111.0" layoutY="62.0" prefHeight="420.0" prefWidth="640.0" style="-fx-border-color: black;">
                <children>
-                      <TabPane fx:id="tabPane" prefHeight="255.0" prefWidth="520.0" tabClosingPolicy="UNAVAILABLE" />
+                      <TabPane fx:id="tabPane" prefHeight="420.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" />
                </children>
             </Pane>
-                <Button fx:id="saveBtn" layoutX="557.0" layoutY="340.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" text="Save" />
-                <Button fx:id="exitBtn" layoutX="611.0" layoutY="340.0" mnemonicParsing="false" onKeyPressed="#exitOnReturn" onMouseClicked="#exitOnClick" prefHeight="25.0" prefWidth="40.0" text="Exit" />
+                <Button fx:id="saveBtn" layoutX="588.0" layoutY="502.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="69.0" text="Save" />
+                <Button fx:id="exitBtn" layoutX="682.0" layoutY="502.0" mnemonicParsing="false" onKeyPressed="#exitOnReturn" onMouseClicked="#exitOnClick" prefHeight="31.0" prefWidth="56.0" text="Exit" />
 
             </children>
             <stylesheets>

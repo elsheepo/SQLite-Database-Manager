@@ -14,13 +14,13 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/dbManager.fxml"));
         primaryStage.setTitle("elsheepo's SQLite DB Manager");
-        primaryStage.setScene(new Scene(root, 675, 455));
+        primaryStage.setScene(new Scene(root, 800, 600));
 
-        primaryStage.setMinWidth(677);
-        primaryStage.setMaxWidth(677);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMaxWidth(800);
 
-        primaryStage.setMinHeight(447);
-        primaryStage.setMaxHeight(447);
+        primaryStage.setMinHeight(632);
+        primaryStage.setMaxHeight(632);
 
         primaryStage.show();
     }
