@@ -72,6 +72,7 @@ public class Controller implements Initializable {
         } else {
             dbController = new DBController(dbUrlTxt.getText());
             ResultSet tableNames = dbController.queryTables();
+            System.out.println("ResultSet tableNames returned");
 
             try {
                 while (tableNames.next()) {

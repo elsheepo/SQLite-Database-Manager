@@ -19,11 +19,11 @@ class DBController {
 
         try {
             connection = DriverManager.getConnection(dbUrl.toString());
+            System.out.println("Connection to database established");
         } catch (SQLException connectionException) {
             System.err.println(connectionException.toString());
             new Alert(Alert.AlertType.ERROR, "There was a problem connecting to the database. Please check that the url is correct.").showAndWait();
         }
-        System.out.println("Connection to database established");
         this.connection = connection;
     }
 
@@ -39,7 +39,6 @@ class DBController {
         } catch (SQLException tableQueryException) {
             System.err.println(tableQueryException.toString());
         }
-        System.out.println("ResultSet tableNames returned");
         return tableNames;
     }
 
