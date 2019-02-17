@@ -35,7 +35,7 @@ class DBController {
         return connection;
     }
 
-    List queryTables() {
+    List<String> queryTables() {
         String statement = "SELECT * FROM sqlite_master WHERE type='table' ORDER BY name";
         List<String> tableNames = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
@@ -50,7 +50,7 @@ class DBController {
         return tableNames;
     }
 
-    Map queryColumns(String tableName) {
+    Map<String, String> queryColumns(String tableName) {
         String statement = "PRAGMA table_info(" + tableName + ")";
         Map<String, String> columns = new HashMap<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
@@ -65,7 +65,7 @@ class DBController {
         return columns;
     }
 
-    ObservableList queryRows(String tableName) {
+    ObservableList<ObservableList> queryRows(String tableName) {
         String statement = "SELECT * from " + tableName;
         ObservableList<ObservableList> rows = FXCollections.observableArrayList();
         try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {

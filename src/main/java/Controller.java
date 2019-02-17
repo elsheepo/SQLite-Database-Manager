@@ -1,7 +1,6 @@
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,8 +13,6 @@ import javafx.util.Callback;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -34,29 +31,25 @@ public class Controller implements Initializable {
     @FXML
     private TabPane tabPane;
     @FXML
-    private Button fileChooserBtn, connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn, exitBtn;
+    private Button connectBtn, disconnectBtn, addBtn, updateBtn, deleteBtn, saveBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dbUrlTxt.setPromptText("select a sqlite database");
-        disconnectBtn.setDisable(true);
-        addBtn.setDisable(true);
-        updateBtn.setDisable(true);
-        deleteBtn.setDisable(true);
-        saveBtn.setDisable(true);
+        toggleButtons();
     }
 
     public void displayFileChooserOnClick() {
-        displayFileChooser();
+        handleDisplayFileChooser();
     }
 
     public void displayFileChooserOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
-            displayFileChooser();
+            handleDisplayFileChooser();
         }
     }
 
-    public void displayFileChooser() {
+    private void handleDisplayFileChooser() {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             dbUrlTxt.setText(file.getAbsolutePath());
@@ -73,22 +66,31 @@ public class Controller implements Initializable {
         }
     }
 
-    public void handleConnect() {
+    private void handleConnect() {
+
         if (dbUrlTxt.getText().isEmpty()) {
+
             new Alert(Alert.AlertType.ERROR, "Database url must be specified.").showAndWait();
+
         } else {
+
             dbController = new DBController(dbUrlTxt.getText());
+            toggleButtons();
+
             List<String> tableNames = dbController.queryTables();
+
             for (String tableName : tableNames) {
-                //ObservableList<ObservableList> data = FXCollections.observableArrayList();
                 Tab tab = new Tab(tableName);
-                TableView<ObservableList> tableView = new TableView<>();
                 tabPane.getTabs().add(tab);
+                TableView<ObservableList> tableView = new TableView<>();
                 tab.setContent(tableView);
-                Map columns = dbController.queryColumns(tableName);
-                columns.forEach((k, v) -> {
-                    TableColumn tableColumn = new TableColumn(k.toString());
-                    switch (v.toString()) {
+                Map<String, String> columns = dbController.queryColumns(tableName);
+
+
+
+                columns.forEach((key, value) -> {
+                    TableColumn tableColumn = new TableColumn(key);
+                    switch (value) {
                         case "INTEGER":
                             tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Integer>, ObservableValue<String>>) param ->
                                     new SimpleStringProperty(param.getValue().toString()));
@@ -104,57 +106,10 @@ public class Controller implements Initializable {
                     tableView.getColumns().addAll(tableColumn);
                 });
 
-//                ResultSet tableValues = dbController.queryData(tableName);
-//
-//                try {
-//                    for (int i = 0; i < tableValues.getMetaData().getColumnCount(); i++) {
-//                        final int j = i;
-//                        int dataValue = tableValues.getMetaData().getColumnType(i + 1);
-//
-//                        TableColumn tableColumn = new TableColumn(tableValues.getMetaData().getColumnName(i + 1));
-
-//                        if (dataValue == 4) {
-//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Integer>, ObservableValue<String>>) param ->
-//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-//                        } else if (dataValue == 7) {
-//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Double>, ObservableValue<String>>) param ->
-//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-//                        } else if (dataValue == 12) {
-//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param ->
-//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-//                        }
-//                        tableView.getColumns().addAll(tableColumn);
-//                    }
-//
-//                    while (tableValues.next()) {
-//                        ObservableList<String> row = FXCollections.observableArrayList();
-//
-//                        for (int i = 1; i <= tableValues.getMetaData().getColumnCount(); i++) {
-//                            row.add(tableValues.getString(i));
-//                        }
-//                        data.add(row);
-//                    }
-//                    tableValues.close();
-//                } catch (SQLException e) {
-//                    e.toString();
-//                }
-//                        tableView.getItems().addAll(data);
-
                 ObservableList<ObservableList> rows = dbController.queryRows(tableName);
                 tableView.getItems().addAll(rows);
             }
         }
-
-        connectBtn.setDisable(true);
-        disconnectBtn.setDisable(false);
-        addBtn.setDisable(false);
-        updateBtn.setDisable(false);
-        deleteBtn.setDisable(false);
-        saveBtn.setDisable(false);
-
-    }
-
-    public void add() {
     }
 
     public void disconnectOnClick() {
@@ -167,19 +122,9 @@ public class Controller implements Initializable {
         }
     }
 
-    public void handleDisconnect() {
-        // close database connection
+    private void handleDisconnect() {
         dbController.disconnect();
-
-        // reset buttons
-        connectBtn.setDisable(false);
-        disconnectBtn.setDisable(true);
-        addBtn.setDisable(true);
-        updateBtn.setDisable(true);
-        deleteBtn.setDisable(true);
-        saveBtn.setDisable(true);
-
-        // clear the TabPane
+        toggleButtons();
         tabPane.getTabs().clear();
     }
 
@@ -192,12 +137,30 @@ public class Controller implements Initializable {
             handleExit();
     }
 
-    public void handleExit() {
+    private void handleExit() {
         new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit?").showAndWait();
         if (dbController != null && dbController.getConnection() != null) {
             dbController.disconnect();
         }
         Platform.exit();
+    }
+
+    private void toggleButtons() {
+        if (dbController != null && dbController.getConnection() != null) {
+            connectBtn.setDisable(true);
+            disconnectBtn.setDisable(false);
+            addBtn.setDisable(false);
+            updateBtn.setDisable(false);
+            deleteBtn.setDisable(false);
+            saveBtn.setDisable(false);
+        } else {
+            connectBtn.setDisable(false);
+            disconnectBtn.setDisable(true);
+            addBtn.setDisable(true);
+            updateBtn.setDisable(true);
+            deleteBtn.setDisable(true);
+            saveBtn.setDisable(true);
+        }
     }
 
 }
