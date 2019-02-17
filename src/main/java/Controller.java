@@ -15,6 +15,9 @@ import javafx.util.Callback;
 import java.io.File;
 import java.net.URL;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -46,11 +49,13 @@ public class Controller implements Initializable {
     public void displayFileChooserOnClick() {
         displayFileChooser();
     }
+
     public void displayFileChooserOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
             displayFileChooser();
         }
     }
+
     public void displayFileChooser() {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
@@ -61,83 +66,95 @@ public class Controller implements Initializable {
     public void connectOnClick() {
         handleConnect();
     }
+
     public void connectOnReturn(KeyEvent e) {
         if (e.getCode().equals(KeyCode.ENTER)) {
             handleConnect();
         }
     }
+
     public void handleConnect() {
         if (dbUrlTxt.getText().isEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Database url must be specified.").showAndWait();
         } else {
             dbController = new DBController(dbUrlTxt.getText());
-            ResultSet tableNames = dbController.queryTables();
-            System.out.println("ResultSet tableNames returned");
-
-            try {
-                while (tableNames.next()) {
-                    ObservableList<ObservableList> data = FXCollections.observableArrayList();
-                    Tab tab = new Tab(tableNames.getString("name"));
-                    TableView<ObservableList> tableView = new TableView<>();
-                    tabPane.getTabs().add(tab);
-                    tab.setContent(tableView);
-
-                    ResultSet tableValues = dbController.queryData(tableNames);
-
-                    for (int i = 0; i < tableValues.getMetaData().getColumnCount(); i++) {
-                        final int j = i;
-                        int dataValue = tableValues.getMetaData().getColumnType(i + 1);
-                        String dataValueString = null;
-
-                        // I need to use some generics here on the TableColumn to get rid of the Unchecked call to setCellValueFactory()
-                        TableColumn tableColumn = new TableColumn(tableValues.getMetaData().getColumnName(i + 1));
-                        if (dataValue == 4) {
+            List<String> tableNames = dbController.queryTables();
+            for (String tableName : tableNames) {
+                //ObservableList<ObservableList> data = FXCollections.observableArrayList();
+                Tab tab = new Tab(tableName);
+                TableView<ObservableList> tableView = new TableView<>();
+                tabPane.getTabs().add(tab);
+                tab.setContent(tableView);
+                Map columns = dbController.queryColumns(tableName);
+                columns.forEach((k, v) -> {
+                    TableColumn tableColumn = new TableColumn(k.toString());
+                    switch (v.toString()) {
+                        case "INTEGER":
                             tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Integer>, ObservableValue<String>>) param ->
-                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-                            dataValueString = "Integer";
-                        } else if (dataValue == 7) {
+                                    new SimpleStringProperty(param.getValue().toString()));
+                        case "REAL":
                             tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Double>, ObservableValue<String>>) param ->
-                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-                            dataValueString = "Double";
-                        } else if (dataValue == 12) {
+                                    new SimpleStringProperty(param.getValue().toString()));
+                        case "TEXT":
+                        case "NONE":
+                        default:
                             tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param ->
-                                    new SimpleStringProperty(param.getValue().get(j).toString()));
-                            dataValueString = "String";
-                        }
-                        tableView.getColumns().addAll(tableColumn);
+                                    new SimpleStringProperty(param.getValue().toString()));
                     }
-                    int rowCounter = 0;
+                    tableView.getColumns().addAll(tableColumn);
+                });
 
-                    while (tableValues.next()) {
-                        ObservableList<String> row = FXCollections.observableArrayList();
+//                ResultSet tableValues = dbController.queryData(tableName);
+//
+//                try {
+//                    for (int i = 0; i < tableValues.getMetaData().getColumnCount(); i++) {
+//                        final int j = i;
+//                        int dataValue = tableValues.getMetaData().getColumnType(i + 1);
+//
+//                        TableColumn tableColumn = new TableColumn(tableValues.getMetaData().getColumnName(i + 1));
 
-                        for (int i = 1; i <= tableValues.getMetaData().getColumnCount(); i++) {
-                            row.add(tableValues.getString(i));
-                        }
-                        data.add(row);
-                        rowCounter++;
-                    }
-                    tableValues.close();
-                    tableView.getItems().addAll(data);
-                }
-                tableNames.close();
-                System.out.println("ResultSet tableNames closed");
+//                        if (dataValue == 4) {
+//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Integer>, ObservableValue<String>>) param ->
+//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
+//                        } else if (dataValue == 7) {
+//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Double>, ObservableValue<String>>) param ->
+//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
+//                        } else if (dataValue == 12) {
+//                            tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param ->
+//                                    new SimpleStringProperty(param.getValue().get(j).toString()));
+//                        }
+//                        tableView.getColumns().addAll(tableColumn);
+//                    }
+//
+//                    while (tableValues.next()) {
+//                        ObservableList<String> row = FXCollections.observableArrayList();
+//
+//                        for (int i = 1; i <= tableValues.getMetaData().getColumnCount(); i++) {
+//                            row.add(tableValues.getString(i));
+//                        }
+//                        data.add(row);
+//                    }
+//                    tableValues.close();
+//                } catch (SQLException e) {
+//                    e.toString();
+//                }
+//                        tableView.getItems().addAll(data);
 
-            } catch (SQLException tableQueryException) {
-                System.err.println(tableQueryException.toString());
+                ObservableList<ObservableList> rows = dbController.queryRows(tableName);
+                tableView.getItems().addAll(rows);
             }
-            connectBtn.setDisable(true);
-            disconnectBtn.setDisable(false);
-            addBtn.setDisable(false);
-            updateBtn.setDisable(false);
-            deleteBtn.setDisable(false);
-            saveBtn.setDisable(false);
-
         }
+
+        connectBtn.setDisable(true);
+        disconnectBtn.setDisable(false);
+        addBtn.setDisable(false);
+        updateBtn.setDisable(false);
+        deleteBtn.setDisable(false);
+        saveBtn.setDisable(false);
+
     }
 
     public void add() {
-        
     }
 
     public void disconnectOnClick() {
