@@ -20,7 +20,6 @@ class DBController {
         Connection connection = null;
         StringBuilder dbUrl = new StringBuilder("jdbc:sqlite:");
         dbUrl.append(databaseURL);
-
         try {
             connection = DriverManager.getConnection(dbUrl.toString());
             System.out.println("Connection to database established");

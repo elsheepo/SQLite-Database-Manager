@@ -108,6 +108,7 @@ public class Controller implements Initializable {
 
                 ObservableList<ObservableList> rows = dbController.queryRows(tableName);
                 tableView.getItems().addAll(rows);
+
             }
         }
     }
