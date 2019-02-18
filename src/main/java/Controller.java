@@ -67,30 +67,21 @@ public class Controller implements Initializable {
     }
 
     private void handleConnect() {
-
         if (dbUrlTxt.getText().isEmpty()) {
-
             new Alert(Alert.AlertType.ERROR, "Database url must be specified.").showAndWait();
-
         } else {
-
             dbController = new DBController(dbUrlTxt.getText());
             toggleButtons();
-
             List<String> tableNames = dbController.queryTables();
-
             for (String tableName : tableNames) {
                 Tab tab = new Tab(tableName);
                 tabPane.getTabs().add(tab);
                 TableView<ObservableList> tableView = new TableView<>();
                 tab.setContent(tableView);
                 Map<String, String> columns = dbController.queryColumns(tableName);
-
-
-
-                columns.forEach((key, value) -> {
-                    TableColumn tableColumn = new TableColumn(key);
-                    switch (value) {
+                columns.forEach((columnName, columnType) -> {
+                    TableColumn tableColumn = new TableColumn(columnName);
+                    switch (columnType) {
                         case "INTEGER":
                             tableColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, Integer>, ObservableValue<String>>) param ->
                                     new SimpleStringProperty(param.getValue().toString()));
@@ -105,10 +96,8 @@ public class Controller implements Initializable {
                     }
                     tableView.getColumns().addAll(tableColumn);
                 });
-
                 ObservableList<ObservableList> rows = dbController.queryRows(tableName);
                 tableView.getItems().addAll(rows);
-
             }
         }
     }
