@@ -16,13 +16,19 @@ class DBController {
 
     private Connection connection;
 
+    DBController() {}
+
     DBController(String databaseURL) {
         Connection connection = null;
         StringBuilder dbUrl = new StringBuilder("jdbc:sqlite:");
         dbUrl.append(databaseURL);
         try {
-            connection = DriverManager.getConnection(dbUrl.toString());
-            System.out.println("Connection to database established");
+            if (Main.debug) {
+                connection = DriverManager.getConnection("jdbc:sqlite:C:/products.sqlite");
+                System.out.println("Connection to database established\n");
+            } else {
+                connection = DriverManager.getConnection(dbUrl.toString());
+            }
         } catch (SQLException connectionException) {
             System.err.println(connectionException.toString());
             new Alert(Alert.AlertType.ERROR, "There was a problem connecting to the database. Please check that the url is correct.").showAndWait();
@@ -32,6 +38,24 @@ class DBController {
 
     Connection getConnection() {
         return connection;
+    }
+
+    void connect(String databaseURL) {
+        Connection connection = null;
+        StringBuilder dbUrl = new StringBuilder("jdbc:sqlite:");
+        dbUrl.append(databaseURL);
+        try {
+            if (Main.debug) {
+                connection = DriverManager.getConnection("jdbc:sqlite:C:/products.sqlite");
+                System.out.println("Connection to database established\n");
+            } else {
+                connection = DriverManager.getConnection(dbUrl.toString());
+            }
+        } catch (SQLException connectionException) {
+            System.err.println(connectionException.toString());
+            new Alert(Alert.AlertType.ERROR, "There was a problem connecting to the database. Please check that the url is correct.").showAndWait();
+        }
+        this.connection = connection;
     }
 
     List<String> queryTables() {
@@ -64,6 +88,7 @@ class DBController {
         return columns;
     }
 
+
     ObservableList<ObservableList> queryRows(String tableName) {
         String statement = "SELECT * from " + tableName;
         ObservableList<ObservableList> rows = FXCollections.observableArrayList();
@@ -85,8 +110,7 @@ class DBController {
 
     void disconnect() {
         this.connection = null;
-        System.out.println("Connection Closed");
+        if (Main.debug) { System.out.println("Connection Closed"); }
     }
-
 
 }

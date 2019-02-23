@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 // test commit
 public class Main extends Application {
 
-
+    static Boolean debug = true;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
