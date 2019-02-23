@@ -33,7 +33,7 @@ In order to run the program, Java SE Runtime Environment 8 or higher must be ins
       java -jar sqlite-db-mgr-1.0/sqlite-db-mgr.jar
 
 ### :key: Licence
-This software is licenced under the [GPLv3.0](./LICENCE "LICENCE").
+This software is licenced under the [GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html "LICENCE").
 
 ### :email: Contact
 You can contact me directly via the **Contact** form located on [my homepage](https://beatzz.co "beatzz.co")!
