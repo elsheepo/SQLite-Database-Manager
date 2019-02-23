@@ -8,7 +8,7 @@
 ![](https://img.shields.io/badge/license-GPLv3-blue.svg)
 
 
-### :target: To-Do
+### :dart: To-Do
 - [ ] Refactor ResultSet handling to DBController.java
 - [ ] Flexible GUI
 - [ ] add()
