@@ -9,11 +9,11 @@
 
 
 ### :target: To-Do
-- [] Refactor ResultSet handling to DBController.java
-- [] Flexible GUI
-- [] add()
-- [] update()
-- [] delete()
+- [ ] Refactor ResultSet handling to DBController.java
+- [ ] Flexible GUI
+- [ ] add()
+- [ ] update()
+- [ ] delete()
 
 ### :package: Dependencies
 In order to run the program, Java SE Runtime Environment 8 or higher must be installed on your system.
