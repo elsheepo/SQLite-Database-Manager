@@ -16,26 +16,6 @@ class DBController {
 
     private Connection connection;
 
-    DBController() {}
-
-    DBController(String databaseURL) {
-        Connection connection = null;
-        StringBuilder dbUrl = new StringBuilder("jdbc:sqlite:");
-        dbUrl.append(databaseURL);
-        try {
-            if (Main.debug) {
-                connection = DriverManager.getConnection("jdbc:sqlite:C:/products.sqlite");
-                System.out.println("Connection to database established\n");
-            } else {
-                connection = DriverManager.getConnection(dbUrl.toString());
-            }
-        } catch (SQLException connectionException) {
-            System.err.println(connectionException.toString());
-            new Alert(Alert.AlertType.ERROR, "There was a problem connecting to the database. Please check that the url is correct.").showAndWait();
-        }
-        this.connection = connection;
-    }
-
     Connection getConnection() {
         return connection;
     }
@@ -47,7 +27,7 @@ class DBController {
         try {
             if (Main.debug) {
                 connection = DriverManager.getConnection("jdbc:sqlite:C:/products.sqlite");
-                System.out.println("Connection to database established\n");
+                System.out.println("Connection to C:/products.sqlite established\n");
             } else {
                 connection = DriverManager.getConnection(dbUrl.toString());
             }
